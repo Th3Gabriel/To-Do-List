@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="css/img/tdl.png" type="image/x-icon">
+        <link rel="stylesheet" href="css/index.css">
+        <script src="js/index.js"></script>
+
+        <title>To-do List</title>
+
+    </head>
+    <body>
+        <main>
+            <h1>Lista de Tarefa</h1>
+
+            <section class="createToDoSection">
+                <form id="createToDoForm">
+                <input
+                type="text"
+                id="description"
+                name="description"
+                placeholder="Qual a tarefa que deseja cadastrar?"
+                aria-label="Qual a tarefa que deseja cadastrar?"
+                class="inputDescription"
+                >
+                <button type="submit" aria-label="Cadastrar tarefa" class="addTaskBtn">+</button>
+                </form>
+                </section>
+
+            <section class="todo-list-section">
+                <ul id="todo-list"></ul>
+            </section>
+
+            <footer>
+                <button class="removeDoneTasksBtn" onclick="removeDoneTasks()">
+                Remover tarefas concluídas
+                </button>
+            </footer>
+        </main>
+    </body>
+</html>
