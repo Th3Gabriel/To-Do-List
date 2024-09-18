@@ -1,135 +1,121 @@
-let tasks = [
-    { id: 1, description: "Comprar pão", checked: false },
-    { id: 2, description: "Passear com o cachorro", checked: false },
-    { id: 3, description: "Fazer o almoço", checked: false }
-];
+let Tarefas = [];
 
-const getTasksFromLocalStorage = () => {
-    const localTasks = JSON.parse(window.localStorage.getItem('tasks'));
-    return localTasks ? localTasks : [] ;
+// Função para obter a data atual no formato 'dd/mm/yyyy'
+function TaskData() {
+    let dataAtual = new Date();
+    let dia = String(dataAtual.getDate()).padStart(2, '0');
+    let mes = String(dataAtual.getMonth() + 1).padStart(2, '0');
+    let ano = dataAtual.getFullYear();
+    let dataFormatada = dia + '/' + mes + '/' + ano;
+    return dataFormatada;
 }
 
-const setTasksInLocalStorage = (tasks) => {
-    window.localStorage.setItem('tasks', JSON.stringify(tasks));
-}
-
-// Função para remover uma tarefa da lista e do DOM
-const removeTask = (taskId) => {
-    const tasks = getTasksFromLocalStorage();
-    const updatedTasks = tasks.filter(({ id }) => parseInt(id) !== parseInt(taskId));
-    setTasksInLocalStorage(updatedTasks);
-    const taskElement = document.getElementById(`task-${taskId}`);
-    if (taskElement) {
-        document.getElementById('todo-list').removeChild(taskElement);
-    }
-};
-
-const removeDoneTask = () => { 
-    const tasks = getTasksFromLocalStorage();
-    const taskstoremove = tasks
-        .filter(({ checked }) => checked)
-        .map(({ id }) => `task-${id}`);  // Corrige o ID da tarefa no DOM
-
-    const updatedTasks =  tasks.filter(({ checked }) => !checked);
-    setTasksInLocalStorage(updatedTasks);  // Atualiza o localStorage
-
-    taskstoremove.forEach((taskId) => {
-        const taskElement = document.getElementById(taskId);
-        if (taskElement) {
-            document.getElementById("todo-list").removeChild(taskElement);
-        }
-    });
-};
-
-const onCheckBoxClick = (event) => {
-    const id = event.target.id.split('-')[0];
-    const tasks = getTasksFromLocalStorage();
-
-    const updatedTasks = tasks.map((task) => {
-        if (parseInt(id) === parseInt(task.id)) {
-            return { ...task, checked: event.target.checked };
-        }
-        return task;
-    });
-
-    setTasksInLocalStorage(updatedTasks);  // Atualiza o localStorage
-}
-
-// Função para criar o checkbox com label
-const getCheckboxInput = ({ id, description, checked }) => {
-    const checkbox = document.createElement('input');
-    const label = document.createElement('label');
-    const wrapper = document.createElement('div');
-    const checkboxId = `${id}-checkbox`;
-
-    checkbox.type = 'checkbox';
-    checkbox.id = checkboxId;
-    checkbox.checked = checked || false;
-    checkbox.addEventListener('change', onCheckBoxClick);
-
-    label.textContent = description;
-    label.htmlFor = checkboxId;
-
-    wrapper.className = 'checkbox-label-container';
-    wrapper.appendChild(checkbox);
-    wrapper.appendChild(label);
-
-    return wrapper;
-};
-
-// Função para criar um item de lista
-function createTaskListItem(task, checkbox) {
-    const li = document.createElement('li');
-    li.id = `task-${task.id}`;
-    li.appendChild(checkbox);
-
-    const removeTaskButton = document.createElement('button');
-    removeTaskButton.textContent = 'X';
-    removeTaskButton.ariaLabel = 'Remover tarefa';
-    removeTaskButton.onclick = () => removeTask(task.id);
-
-    li.appendChild(removeTaskButton);
-    document.querySelector('#todo-list').appendChild(li);
-}
-
-const getNewTaskId = () => {
-    const tasks = getTasksFromLocalStorage();
-    const lastId = tasks[tasks.length - 1]?.id;
-    return lastId ? lastId + 1 : 1;
-};
-
-// Função para obter os dados de uma nova tarefa
-const getNewTaskData = (event) => {
-    const description = event.target.elements.description.value;
-    const id = getNewTaskId();
-    return { description, id };
-};
-
-// Função para criar uma nova tarefa
-const CreateTask = (event) => {
+// Função para adicionar uma nova tarefa
+function adicionarTask(event) {
     event.preventDefault();
-    const NewTaskData = getNewTaskData(event);
-    const { id, description } = NewTaskData;
 
-    const checkbox = getCheckboxInput({ id, description, checked: false });
+    const nome = document.getElementById('task-name').value;
+    const etiqueta = document.getElementById('task-etiqueta').value;
 
-    const tasks = getTasksFromLocalStorage();
-    tasks.push({ id, description, checked: false });
-    setTasksInLocalStorage(tasks);  // Atualiza o localStorage
-    createTaskListItem({ id, description, checked: false }, checkbox);
+    const novaTarefa = { tarefa: nome, etiqueta: etiqueta, criada: TaskData() };
+    Tarefas.push(novaTarefa);
+    saveTarefas(); // Salva as tarefas no localStorage
 
-    event.target.elements.description.value = '';
-};
+    document.getElementById('createListaForm').reset();
+    renderTarefas();
+    atualizarStatusTarefas(); // Atualiza o status após adicionar a nova tarefa
+}
 
-// Função executada ao carregar a página
-window.onload = function () {
-    const form = document.getElementById('createToDoForm');
-    form.addEventListener('submit', CreateTask);
+// Função para renderizar as tarefas na lista
+function renderTarefas() {
+    const lista = document.getElementById('todo-list');
+    lista.innerHTML = '';
 
-    // Carrega as tarefas existentes ao inicializar
-    const tasks = getTasksFromLocalStorage();
-    tasks.forEach((task) => {
-        const checkbox = getCheckboxInput(task);
-        createTaskListItem(task, checkbox);
+    Tarefas.forEach((tarefa, index) => {
+        const listItem = document.createElement('li');
+
+        const tarefaNome = document.createElement('div');
+        tarefaNome.textContent = tarefa.tarefa;
+        tarefaNome.className = 'task-name';
+
+        const tarefaEtiqueta = document.createElement('div');
+        tarefaEtiqueta.textContent = tarefa.etiqueta;
+        tarefaEtiqueta.className = 'task-etiqueta';
+
+        const tarefaData = document.createElement('div');
+        tarefaData.textContent = `Criada em: ${tarefa.criada}`;
+        tarefaData.className = 'task-data';
+
+        const DoneTaskButton = document.createElement('button');
+        DoneTaskButton.textContent = 'Concluir';
+        DoneTaskButton.className = 'btn_concluir';
+        DoneTaskButton.ariaLabel = 'Remover tarefa';
+
+        DoneTaskButton.addEventListener('click', () => {
+            if (DoneTaskButton.classList.contains('concluido')) {
+                DoneTaskButton.textContent = 'Concluir';
+                DoneTaskButton.classList.remove('concluido');
+                DoneTaskButton.classList.add('btn_concluir');
+            } else {
+                DoneTaskButton.innerHTML = '<img src="css/img/concluido.png" style="width: 35px;" alt="Concluído">';
+                DoneTaskButton.classList.remove('btn_concluir');
+                DoneTaskButton.classList.add('concluido');
+            }
+            atualizarStatusTarefas();
+            saveTarefas(); // Salva as tarefas no localStorage após atualização
+        });
+
+        listItem.appendChild(tarefaNome);
+        listItem.appendChild(tarefaEtiqueta);
+        listItem.appendChild(tarefaData);
+        listItem.appendChild(DoneTaskButton);
+
+        lista.appendChild(listItem);
     });
+}
+
+// Função para salvar as tarefas no localStorage
+function saveTarefas() {
+    localStorage.setItem('tarefas', JSON.stringify(Tarefas));
+}
+
+// Função para carregar as tarefas do localStorage
+function loadTarefas() {
+    const tarefasSalvas = localStorage.getItem('tarefas');
+    if (tarefasSalvas) {
+        Tarefas = JSON.parse(tarefasSalvas);
+    }
+}
+
+// Função para deletar tarefas concluídas
+function deletarConcluidas() {
+    Tarefas = Tarefas.filter((_, index) => {
+        const taskButton = document.getElementsByClassName('btn_concluir')[index] || document.getElementsByClassName('concluido')[index];
+        return !taskButton || !taskButton.classList.contains('concluido'); // Mantém apenas as tarefas não concluídas
+    });
+    saveTarefas(); // Salva as tarefas no localStorage após exclusão
+    renderTarefas();
+    atualizarStatusTarefas();
+}
+
+// Função para atualizar o status das tarefas
+function atualizarStatusTarefas() {
+    const totalTasks = Tarefas.length;
+    const completedTasks = document.querySelectorAll('.concluido').length;
+    document.getElementById('task-status').textContent = `Total: ${totalTasks} | Concluídas: ${completedTasks}`;
+}
+
+// Chama a função para carregar as tarefas e adicionar eventos quando a página carregar
+window.onload = function () {
+    loadTarefas(); // Carrega as tarefas do localStorage
+    renderTarefas();
+    atualizarStatusTarefas();
+
+    document.getElementById('createListaForm').addEventListener('submit', (event) => {
+        adicionarTask(event);
+        atualizarStatusTarefas();
+    });
+
+    // Adiciona o evento ao botão de deletar tarefas concluídas
+    document.getElementById('delete-completed-button').addEventListener('click', deletarConcluidas);
 };

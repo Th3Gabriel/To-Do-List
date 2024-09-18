@@ -1,44 +1,163 @@
 :root {
-    --color-light-beige: #B9A28F;
-    --color-brown: #A16E49;
-    --color-dark-brown: #713F1D;
-    --color-dark: #29211A;
-    --color-white: #FFFFFF;
-    --color-hover: #713F1D;
-    /* mesma cor usada para o hover */
+    --purple: #663364;
+    --dark-purple: #4d264b;
+    --deep-purple: #331a32;
+    --very-deep-purple: #1a0d19;
+    --black: #000000;
+    --white: #ffffff;
+    /* Adicionando a cor branca para o fundo dos itens */
 }
 
 html {
+    font-family: "Rubik", sans-serif;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
     font-size: 10px;
-    font-family: sans-serif;
 }
 
 body {
     width: 100%;
     height: 100%;
-    background: linear-gradient(var(--color-light-beige), var(--color-brown));
-    display: flex;
     margin: 0;
     padding: 0;
+    background: linear-gradient(270deg, var(--very-deep-purple), var(--dark-purple), var(--purple));
+    background-size: 400% 400%;
+    display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    animation: waveAnimation 15s ease infinite;
+    overflow: hidden;
+    /* Para garantir que os pontos de luz não saiam do corpo */
 }
 
-h1 {
-    font-size: 3.2rem;
-    margin: 0 0 1.6rem;
-    color: var(--color-dark);
+@keyframes waveAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
 }
+
+/* Criar estrelas */
+.stars {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.star {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    opacity: 0.8;
+    animation: twinkle 1.5s infinite ease-in-out, moveStar 30s linear infinite;
+}
+
+/* Animação para as estrelas piscarem */
+@keyframes twinkle {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+
+    50% {
+        opacity: 0.75;
+        transform: scale(0.75);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0);
+    }
+}
+
+/* Animação para as estrelas se moverem */
+@keyframes moveStar {
+    0% {
+        transform: translateX(-100vw) translateY(-100vh);
+    }
+
+    100% {
+        transform: translateX(100vw) translateY(100vh);
+    }
+}
+
+
+
 
 main {
     width: 100%;
-    max-width: 40rem;
-    background: var(--color-white);
+    max-width: 80rem;
+    background: whitesmoke;
     border-radius: .8rem;
-    padding: 3.2rem 2.4rem;
+    padding: 4rem 3.2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+main>h1 {
+    color: var(--purple);
+    font-weight: bold;
+    font-size: 40px;
+}
+
+#createListaForm {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.6rem;
+}
+
+.InputForm {
+    height: 3.2rem;
+    width: calc(100% - 4.8rem);
+    /* Ajustado para evitar overflow */
+    font-size: 1.6rem;
+    border-radius: 0.4rem;
+    margin-right: 0.4rem;
+    outline: 0;
+    border: 1px solid var(--dark-purple);
+    padding-left: 0.8rem;
+    transition: border-color 0.3s ease;
+}
+
+.InputForm::placeholder {
+    font-size: 12px;
+}
+
+.InputForm:focus {
+    border-color: var(--purple);
+}
+
+.addTaskBtn {
+    height: 3.6rem;
+    width: 3.6rem;
+    color: whitesmoke;
+    background-color: var(--deep-purple);
+    border: none;
+    border-radius: 0.4rem;
+    font-size: 2.4rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s ease;
+}
+
+.addTaskBtn:hover {
+    background-color: var(--purple);
 }
 
 .todo-list-section {
@@ -47,105 +166,146 @@ main {
 }
 
 .todo-list-section ul {
-    padding-inline-start: 0rem;
-    height: 23rem;
-    overflow: auto;
+    padding-inline-start: 0;
+    height: 25rem;
+    overflow-y: auto;
+    margin: 0;
 }
 
-.todo-list-section ul li {
+#todo-list {
     list-style-type: none;
-    padding: .8rem 1.6rem;
-    font-size: 1.6rem;
-    background-color: var(--color-white);
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    margin-bottom: .8rem;
+    /* Remove a marcação padrão dos itens de lista */
+    padding: 0;
+    /* Remove o preenchimento padrão */
 }
 
-.todo-list-section ul li:last-child {
-    margin-bottom: 0;
-}
-
-.todo-list-section ul li button {
-    width: 2.4rem;
-    height: 2.4rem;
-    background-color: var(--color-brown);
-    color: var(--color-white);
-    border: none;
-    border-radius: .4rem;
-    cursor: pointer;
-}
-
-.todo-list-section ul li button:hover {
-    background: var(--color-hover);
-}
-
-.check-label-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.check-label-container label {
-    cursor: pointer;
-}
-
-.check-label-container input {
-    cursor: pointer;
-    margin: .8rem;
-}
-
-#create-todo-form,
-.createToDoSection form {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.inputDescription {
-    height: 3.2rem;
-    width: 100%;
-    font-size: 1.6rem;
+#todo-list li {
+    border: 1px solid var(--purple);
     border-radius: 0.4rem;
-    margin-right: 4px;
-    outline: 0;
-    border: 1px solid var(--color-dark);
-    padding-left: 0.8rem;
+    margin: 0.8rem 0;
+    padding: 1rem;
+    background-color: var(--white);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative; /* Para que o botão se posicione em relação a este item */
 }
 
-.inputDescription:focus {
-    border-color: var(--color-brown);
+.task-name {
+    font-weight: bold;
+    /* Torna o nome da tarefa em negrito */
+    color: var(--purple);
+    font-size: 18px;
+    margin-bottom: 0.4rem;
+    /* Adiciona uma margem inferior entre o nome e a etiqueta */
 }
 
-.addTaskBtn {
-    box-sizing: border-box;
-    height: 3.6rem;
-    width: 3.6rem;
-    color: var(--color-white);
-    background-color: var(--color-dark-brown);
-    border: none;
-    border-radius: 0.4rem;
-    font-size: 2.4rem;
-    cursor: pointer;
+.task-etiqueta {
+    color: var(--dark-purple);
+    /* Define uma cor mais clara para a etiqueta */
+    font-weight: bolder;
+    font-size: 10px;
+    /* Define um tamanho de fonte menor para a etiqueta */
+    border: 1px solid gray;
+    /* Adiciona uma borda ao redor da etiqueta */
+    border-radius: 1rem;
+    /* Adiciona bordas arredondadas */
+    padding: 0.2rem 0.6rem;
+    /* Adiciona preenchimento interno */
+    display: inline-block;
+    /* Faz com que a borda se ajuste ao conteúdo */
+    margin-top: 0.2rem;
+    /* Adiciona uma margem superior para separar da tarefa */
+    background-color: var(--white);
+    /* Adiciona uma cor de fundo para a etiqueta */
 }
 
-.addTaskBtn:hover {
-    opacity: 0.8;
+.task-data {
+    margin-left: 4px;
+    color: var(--dark-purple);
+    /* Define uma cor mais clara para a etiqueta */
+    font-weight: bolder;
+    font-size: 10px;
+    /* Define um tamanho de fonte menor para a etiqueta */
+    border-radius: 1rem;
+    /* Adiciona bordas arredondadas */
+    padding: 0.2rem 0.6rem;
+    /* Adiciona preenchimento interno */
+    display: inline-block;
+    /* Faz com que a borda se ajuste ao conteúdo */
+    margin-top: 0.2rem;
+    /* Adiciona uma margem superior para separar da tarefa */
+    background-color: var(--white);
+    /* Adiciona uma cor de fundo para a etiqueta */
+
 }
 
-.removeDoneTasksBtn {
-    box-sizing: border-box;
-    height: 3.6rem;
+
+
+.btn_concluir {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Define a distância do lado direito */
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    background-color: var(--dark-purple);
     color: white;
-    background: var(--color-dark-brown);
+    border-radius: 15%;
     border: none;
-    border-radius: 4px;
+    padding: 10px 10px;
     cursor: pointer;
-    padding: 0 1.6rem;
 }
 
-.removeDoneTasksBtn:hover {
-    opacity: 0.8;
+.btn_concluir:hover {
+    background-color: var(--purple);
+}
+
+.concluido {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Define a distância do lado direito */
+    transform: translateY(-50%); /* Centraliza verticalmente */
+    background-color: var(--white);
+    border: none;
+    padding: 10px 10px;
+    cursor: pointer;
+}
+
+footer {
+    background-color: var(--dark-purple);
+    color: var(--white);
+    padding: 2rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-top: 2rem;
+}
+
+footer > div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    width: 100%;
+    justify-content: space-between;
+}
+
+#task-status {
+    color: var(--white);
+    font-size: 1.6rem;
+    font-weight: bold;
+}
+
+#delete-completed-button {
+    background-color: var(--purple);
+    color: var(--white);
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.8rem 1.6rem;
+    font-size: 1.4rem
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#delete-completed-button:hover {
+    background-color: var(--deep-purple);
 }

@@ -1,42 +1,77 @@
 <!DOCTYPE html>
-    <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" href="css/img/tdl.png" type="image/x-icon">
-        <link rel="stylesheet" href="css/index.css">
-        <script src="js/index.js"></script>
+<html lang="pt-br">
 
-        <title>To-do List</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
+    <title>Gerenciador de Tarefas</title>
+</head>
 
-    </head>
-    <body>
-        <main>
-            <h1>Lista de Tarefa</h1>
+<body>
+    <div class="stars">
+        <div class="star" style="top: 10%; left: 20%; width: 2px; height: 2px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 50%; left: 60%; width: 1.8px; height: 1.8px;"></div>
+        <div class="star" style="top: 70%; left: 80%; width: 2.5px; height: 2.5px;"></div>
+    </div>
+    <div class="stars">
+        <div class="star" style="top: 10%; left: 20%; width: 2px; height: 2px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 50%; left: 60%; width: 1.8px; height: 1.8px;"></div>
+        <div class="star" style="top: 70%; left: 80%; width: 2.5px; height: 2.5px;"></div>
+    </div>
+    <div class="stars">
+        <div class="star" style="top: 10%; left: 20%; width: 2px; height: 2px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 50%; left: 60%; width: 1.8px; height: 1.8px;"></div>
+        <div class="star" style="top: 70%; left: 80%; width: 2.5px; height: 2.5px;"></div>
+    </div>
+    <div class="stars">
+        <div class="star" style="top: 10%; left: 20%; width: 2px; height: 2px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 30%; left: 40%; width: 1.5px; height: 1.5px;"></div>
+        <div class="star" style="top: 50%; left: 60%; width: 1.8px; height: 1.8px;"></div>
+        <div class="star" style="top: 70%; left: 80%; width: 2.5px; height: 2.5px;"></div>
+    </div>
 
-            <section class="createToDoSection">
-                <form id="createToDoForm">
-                <input
-                type="text"
-                id="description"
-                name="description"
-                placeholder="Qual a tarefa que deseja cadastrar?"
-                aria-label="Qual a tarefa que deseja cadastrar?"
-                class="inputDescription"
-                >
-                <button type="submit" aria-label="Cadastrar tarefa" class="addTaskBtn">+</button>
+    <main>
+        <h1>Gerenciador de Tarefas</h1>
+
+        <section>
+            <section id="CreateLista">
+                <form id="createListaForm">
+                    <input type="text" id="task-name" name="description" placeholder="Qual a tarefa que deseja cadastrar?" aria-label="Qual a tarefa que deseja cadastrar?" class="InputForm">
+
+                    <input type="text" id="task-etiqueta" name="Etiqueta" placeholder="Etiqueta" aria-label="Etiqueta" class="InputForm">
+
+                    <button type="submit" aria-label="Cadastrar tarefa" class="addTaskBtn">+</button>
                 </form>
-                </section>
+
+            </section>
+
 
             <section class="todo-list-section">
                 <ul id="todo-list"></ul>
             </section>
 
             <footer>
-                <button class="removeDoneTasksBtn" onclick="removeDoneTasks()">
-                Remover tarefas concluídas
-                </button>
+                <div>
+                    <span id="task-status"></span>
+                    <button id="delete-completed-button">Deletar Tarefas Concluídas</button>
+                </div>
+                
             </footer>
-        </main>
-    </body>
+
+        </section>
+    </main>
+    <script src="js/index.js"></script>
+</body>
+
 </html>
